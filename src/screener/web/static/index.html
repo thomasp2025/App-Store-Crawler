@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App Store Screener</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f9f9f7;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a;
+  --good:#0ca30c; --warning:#fab219; --critical:#d03b3b;
+  --seq-250:#86b6ef; --seq-450:#2a78d6; --seq-600:#184f95;
+  --recessive:#898781;
+  --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-1:#1a1a19; --page:#0d0d0d;
+    --text-primary:#fff; --text-secondary:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+    --seq-250:#184f95; --seq-450:#3987e5; --seq-600:#86b6ef;
+    --recessive:#6b6b64;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d;
+  --text-primary:#fff; --text-secondary:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+  --seq-250:#184f95; --seq-450:#3987e5; --seq-600:#86b6ef;
+  --recessive:#4a4a46;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--text-primary);font:13px/1.45 var(--sans);
+     font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
+a{color:var(--series-1)}
+button{font:inherit;font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+header{display:flex;align-items:baseline;gap:14px;padding:12px 18px;
+       border-bottom:1px solid var(--border);background:var(--surface-1);
+       position:sticky;top:0;z-index:20;flex-wrap:wrap}
+header h1{font-size:14px}
+header .sub{color:var(--muted);font-size:12px}
+header .spacer{flex:1}
+.layout{display:grid;grid-template-columns:296px 1fr;gap:0;align-items:start}
+@media (max-width:1000px){.layout{grid-template-columns:1fr}}
+aside{border-right:1px solid var(--border);background:var(--surface-1);
+      padding:14px;position:sticky;top:49px;max-height:calc(100vh - 49px);overflow-y:auto}
+@media (max-width:1000px){aside{position:static;max-height:none;border-right:0;
+      border-bottom:1px solid var(--border)}}
+main{padding:14px 18px 60px;min-width:0}
+
+/* ---------- controls ---------- */
+.group{margin-bottom:18px}
+.group>h3{font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+          color:var(--muted);margin-bottom:9px}
+.field{margin-bottom:11px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;
+             font-size:12px;color:var(--text-secondary);margin-bottom:3px;gap:8px}
+.field label b{font-weight:600;color:var(--text-primary);font-family:var(--mono);font-size:12px}
+input[type=range]{width:100%;accent-color:var(--series-1);margin:0}
+input[type=text],input[type=number],select,textarea{
+  width:100%;padding:5px 7px;border:1px solid var(--border);border-radius:5px;
+  background:var(--page);color:var(--text-primary);font:12px var(--sans);
+  font-variant-numeric:tabular-nums}
+textarea{font-family:var(--mono);font-size:11px;line-height:1.5;resize:vertical;min-height:120px}
+.btn{padding:6px 11px;border:1px solid var(--border);border-radius:5px;
+     background:var(--surface-1);color:var(--text-primary);cursor:pointer}
+.btn:hover{background:var(--page)}
+.btn.primary{background:var(--series-1);border-color:var(--series-1);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:3px 8px;font-size:12px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.checkline{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-secondary);
+           margin-bottom:7px}
+.checkline input{accent-color:var(--series-1)}
+
+/* ---------- preview banner ---------- */
+.preview{border:1px solid var(--border);border-left:3px solid var(--series-2);
+         border-radius:6px;padding:8px 10px;margin-bottom:14px;background:var(--page);
+         font-size:12px;color:var(--text-secondary)}
+.preview b{color:var(--text-primary);font-family:var(--mono)}
+.preview.clean{border-left-color:var(--grid);color:var(--muted)}
+
+/* ---------- tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));
+       gap:9px;margin-bottom:14px}
+.tile{background:var(--surface-1);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
+.tile .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tile .v{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:2px}
+.tile .n{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* ---------- charts ---------- */
+.charts{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+.panel{background:var(--surface-1);border:1px solid var(--border);border-radius:7px;padding:12px}
+.panel>header{all:unset;display:flex;justify-content:space-between;align-items:baseline;
+              gap:10px;margin-bottom:2px;flex-wrap:wrap}
+.panel h2{font-size:13px}
+.panel .desc{font-size:11.5px;color:var(--muted);margin:2px 0 8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:860px){.pair{grid-template-columns:1fr}}
+svg{display:block;width:100%;overflow:visible}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-secondary)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;
+          vertical-align:-1px}
+.tick{fill:var(--muted);font-size:10.5px}
+.axlabel{fill:var(--text-secondary);font-size:11px}
+
+/* ---------- table ---------- */
+.tablewrap{background:var(--surface-1);border:1px solid var(--border);border-radius:7px;
+           overflow:hidden}
+.tabletools{display:flex;gap:8px;padding:9px 11px;border-bottom:1px solid var(--border);
+            align-items:center;flex-wrap:wrap}
+.tabletools input[type=text]{width:190px}
+.tabletools select{width:auto}
+.scroll{overflow-x:auto;max-height:60vh;overflow-y:auto}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{padding:6px 9px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--grid)}
+th{position:sticky;top:0;background:var(--surface-1);z-index:2;cursor:pointer;
+   font-weight:600;color:var(--text-secondary);font-size:11px;text-transform:uppercase;
+   letter-spacing:.05em;user-select:none}
+th:hover{color:var(--text-primary)}
+th .arrow{color:var(--series-1);font-size:10px}
+td.num{text-align:right;font-family:var(--mono);font-size:11.5px}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--page)}
+.pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;
+      border:1px solid var(--border)}
+.pill.pass{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+.pill.rej{color:var(--muted)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;
+     vertical-align:-1px}
+
+/* ---------- drawer ---------- */
+.drawer{position:fixed;inset:0 0 0 auto;width:min(620px,100%);background:var(--surface-1);
+        border-left:1px solid var(--border);box-shadow:-12px 0 34px rgba(0,0,0,.16);
+        z-index:40;overflow-y:auto;padding:16px 18px 50px;transform:translateX(100%);
+        transition:transform .18s ease}
+.drawer.open{transform:none}
+.drawer .close{position:absolute;top:12px;right:14px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:12px;margin:10px 0 14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--mono);font-size:11.5px}
+.cluster{border:1px solid var(--border);border-radius:6px;padding:9px 11px;margin-bottom:8px}
+.cluster .t{font-weight:600;font-size:12.5px}
+.quote{border-left:2px solid var(--grid);padding-left:9px;margin:6px 0;color:var(--text-secondary);
+       font-size:11.5px}
+.tooltip{position:fixed;pointer-events:none;z-index:60;background:var(--surface-1);
+         border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-size:11.5px;
+         box-shadow:0 4px 14px rgba(0,0,0,.13);opacity:0;transition:opacity .1s;max-width:250px}
+.tooltip.on{opacity:1}
+.tooltip b{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.warn{color:var(--critical)}
+.jobline{font-size:11.5px;color:var(--text-secondary);margin-top:7px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<header>
+  <h1>App Store Screener</h1>
+  <span class="sub" id="hdrsub">loading…</span>
+  <span class="spacer"></span>
+  <button class="btn sm" id="themebtn">theme</button>
+</header>
+
+<div class="layout">
+<aside>
+  <div class="group">
+    <h3>Hard filters</h3>
+    <div class="preview clean" id="preview">Move a threshold to preview its effect.</div>
+    <div class="field">
+      <label>Min staleness <b><span id="v_stale"></span> d</b></label>
+      <input type="range" id="f_stale" min="0" max="2000" step="30">
+    </div>
+    <div class="field">
+      <label>Rating floor <b id="v_rmin"></b></label>
+      <input type="range" id="f_rmin" min="1" max="5" step="0.1">
+    </div>
+    <div class="field">
+      <label>Rating ceiling <b id="v_rmax"></b></label>
+      <input type="range" id="f_rmax" min="1" max="5" step="0.1">
+    </div>
+    <div class="field">
+      <label>Min ratings <b id="v_count"></b></label>
+      <input type="range" id="f_count" min="0" max="5000" step="50">
+    </div>
+    <div class="field">
+      <label>Min velocity trend <b id="v_trend"></b></label>
+      <input type="range" id="f_trend" min="0" max="2" step="0.05">
+    </div>
+    <div class="field">
+      <label>Competitor top-rank <b id="v_rank"></b></label>
+      <input type="range" id="f_rank" min="5" max="250" step="5">
+    </div>
+    <div class="checkline">
+      <input type="checkbox" id="f_genre"><label for="f_genre">Competitors must share genre</label>
+    </div>
+    <div class="row">
+      <button class="btn primary" id="apply">Apply &amp; rescore</button>
+      <button class="btn" id="revert">Revert</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <h3>Discovery seeds</h3>
+    <textarea id="seeds" spellcheck="false"></textarea>
+    <div class="row" style="margin-top:7px">
+      <button class="btn" id="runsearch">Search seeds</button>
+      <button class="btn" id="runsnap">Snapshot</button>
+      <button class="btn" id="runrev">Reviews</button>
+    </div>
+    <div class="jobline" id="jobline"></div>
+  </div>
+
+  <div class="group">
+    <h3>Rubric weights</h3>
+    <div id="weights"></div>
+    <div class="jobline" id="wsum"></div>
+  </div>
+</aside>
+
+<main>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="charts">
+    <section class="panel">
+      <header>
+        <h2>Opportunity map</h2>
+        <div class="legend">
+          <span><i style="background:var(--series-1)"></i><span id="leg1">passed filters</span></span>
+          <span><i style="background:var(--recessive)"></i>filtered out</span>
+          <span class="muted">dot size = rating volume</span>
+        </div>
+      </header>
+      <p class="desc">Stale on the right, mid-rated in the band. The shaded box is the
+        current filter — drag a threshold and it moves before you commit.</p>
+      <svg id="scatter" height="330" role="img" aria-label="Staleness versus rating"></svg>
+    </section>
+
+    <div class="pair">
+      <section class="panel">
+        <header><h2>Staleness distribution</h2></header>
+        <p class="desc">Where the staleness cut falls across everything tracked.</p>
+        <svg id="hist" height="190"></svg>
+      </section>
+      <section class="panel">
+        <header><h2>Why apps were rejected</h2></header>
+        <p class="desc">Apps fail several filters at once, so these sum past the total.</p>
+        <svg id="reasons" height="190"></svg>
+      </section>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <div class="tabletools">
+      <input type="text" id="q" placeholder="Search name or seller…">
+      <select id="genrefilter"><option value="">All genres</option></select>
+      <select id="passfilter">
+        <option value="all">All apps</option>
+        <option value="passed">Passed filters</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <span class="spacer" style="flex:1"></span>
+      <span class="muted" id="tablecount"></span>
+    </div>
+    <div class="scroll"><table>
+      <thead><tr id="thead"></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+  </div>
+</main>
+</div>
+
+<div class="drawer" id="drawer"><button class="btn sm close" id="drawerclose">close</button>
+  <div id="drawerbody"></div></div>
+<div class="tooltip" id="tip"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmt = (v,d=2) => v===null||v===undefined||Number.isNaN(v) ? "—" : (+v).toFixed(d);
+const int = v => v===null||v===undefined ? "—" : (+v).toLocaleString();
+let ROWS=[], STATS=null, SETTINGS=null, BASE=null, sortKey="composite", sortDir=-1;
+
+/* ---------------- theme ---------------- */
+$("#themebtn").onclick = () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "dark" ? "light" : cur === "light" ? "dark"
+    : (matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark");
+  document.documentElement.setAttribute("data-theme", next);
+  try{ localStorage.setItem("theme", next); }catch(e){}
+  draw();
+};
+// ?theme=light|dark wins over the stored choice, for screenshots and deep links.
+(()=>{const u=new URLSearchParams(location.search).get("theme");
+  let t=u; if(!t){ try{ t=localStorage.getItem("theme"); }catch(e){} }
+  if(t==="light"||t==="dark") document.documentElement.setAttribute("data-theme",t);})();
+
+/* ---------------- client-side filter preview ----------------
+   Mirrors pipeline/filters.py for the three dimensions plotted here. Missing data
+   never rejects, exactly as the server does -- otherwise the preview would show a
+   funnel the real run doesn't produce. Trend and competitor rules need server data,
+   so they are applied on Apply, not previewed.                                    */
+function liveThresholds(){
+  return {
+    stale:+$("#f_stale").value, rmin:+$("#f_rmin").value, rmax:+$("#f_rmax").value,
+    count:+$("#f_count").value, trend:+$("#f_trend").value, rank:+$("#f_rank").value,
+    genre:$("#f_genre").checked
+  };
+}
+function wouldPass(r,t){
+  if(r.staleness_days!==null && r.staleness_days<t.stale) return false;
+  if(r.rating!==null && (r.rating>t.rmax || r.rating<t.rmin)) return false;
+  if(r.rating_count!==null && r.rating_count<t.count) return false;
+  if(r.velocity_trend!==null && r.velocity_trend<t.trend) return false;
+  return true;
+}
+function dirty(){
+  const t=liveThresholds(), b=BASE;
+  return t.stale!==b.stale||t.rmin!==b.rmin||t.rmax!==b.rmax||t.count!==b.count
+      || t.trend!==b.trend||t.rank!==b.rank||t.genre!==b.genre;
+}
+
+/* ---------------- SVG helpers ---------------- */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs={}){const n=document.createElementNS(NS,tag);
+  for(const k in attrs) n.setAttribute(k,attrs[k]); return n;}
+function clear(svg){while(svg.firstChild) svg.removeChild(svg.firstChild);}
+const tip=$("#tip");
+function showTip(e,html){tip.innerHTML=html;tip.classList.add("on");
+  const p=12,w=tip.offsetWidth,h=tip.offsetHeight;
+  let x=e.clientX+p,y=e.clientY+p;
+  if(x+w>innerWidth-8) x=e.clientX-w-p;
+  if(y+h>innerHeight-8) y=e.clientY-h-p;
+  tip.style.left=x+"px";tip.style.top=y+"px";}
+function hideTip(){tip.classList.remove("on");}
+
+/* ---------------- scatter ---------------- */
+function drawScatter(){
+  const svg=$("#scatter"); clear(svg);
+  const W=svg.clientWidth||900, H=330, M={t:10,r:14,b:34,l:42};
+  const iw=W-M.l-M.r, ih=H-M.t-M.b;
+  const pts=ROWS.filter(r=>r.staleness_days!==null&&r.rating!==null);
+  if(!pts.length){svg.appendChild(el("text",{x:W/2,y:H/2,"text-anchor":"middle",
+    class:"tick"})).textContent="No scored apps yet — run Search seeds.";return;}
+  const t=liveThresholds();
+  const xMax=Math.max(400,...pts.map(p=>p.staleness_days))*1.02;
+  const yMin=1, yMax=5;
+  const X=v=>M.l+(v/xMax)*iw, Y=v=>M.t+ih-((v-yMin)/(yMax-yMin))*ih;
+  const rMax=Math.max(10,...pts.map(p=>p.rating_count||0));
+  const R=c=>{if(!c)return 3; return 3+5*Math.sqrt(Math.log10(1+c)/Math.log10(1+rMax));};
+
+  // target zone from the live thresholds
+  const zx=X(Math.min(t.stale,xMax)), zy=Y(t.rmax);
+  svg.appendChild(el("rect",{x:zx,y:zy,width:Math.max(0,M.l+iw-zx),
+    height:Math.max(0,Y(t.rmin)-zy),fill:"var(--series-1)","fill-opacity":".07",
+    stroke:"var(--series-1)","stroke-opacity":".35","stroke-dasharray":"3 3",rx:2}));
+
+  // gridlines + axes
+  for(let v=yMin;v<=yMax;v+=1){
+    svg.appendChild(el("line",{x1:M.l,x2:M.l+iw,y1:Y(v),y2:Y(v),stroke:"var(--grid)","stroke-width":1}));
+    const tx=el("text",{x:M.l-7,y:Y(v)+3.5,"text-anchor":"end",class:"tick"});
+    tx.textContent=v.toFixed(1); svg.appendChild(tx);
+  }
+  const step=xMax>3000?1000:xMax>1200?500:200;
+  for(let v=0;v<=xMax;v+=step){
+    const tx=el("text",{x:X(v),y:M.t+ih+16,"text-anchor":"middle",class:"tick"});
+    tx.textContent=v>=1000?(v/1000)+"k":v; svg.appendChild(tx);
+  }
+  svg.appendChild(el("line",{x1:M.l,x2:M.l+iw,y1:M.t+ih,y2:M.t+ih,stroke:"var(--axis)","stroke-width":1}));
+  const xl=el("text",{x:M.l+iw/2,y:H-2,"text-anchor":"middle",class:"axlabel"});
+  xl.textContent="days since last update"; svg.appendChild(xl);
+  const yl=el("text",{x:-(M.t+ih/2),y:11,"text-anchor":"middle",class:"axlabel",
+    transform:"rotate(-90)"}); yl.textContent="lifetime rating"; svg.appendChild(yl);
+
+  // rejected first so survivors sit on top
+  // Until a slider moves, colour by what the server actually decided -- the client
+  // can't evaluate the competitor rule, so a preview shown as fact would overstate
+  // the funnel. While dragging, the approximation is the point and is labelled so.
+  const live=dirty();
+  const inZone=[],out=[];
+  pts.forEach(p=>((live?wouldPass(p,t):p.passed)?inZone:out).push(p));
+  const plot=(p,fill)=>{
+    const c=el("circle",{cx:X(p.staleness_days),cy:Y(p.rating),r:R(p.rating_count),
+      fill:fill,stroke:"var(--surface-1)","stroke-width":1.5,"fill-opacity":
+      fill==="var(--recessive)"?".85":".95",style:"cursor:pointer"});
+    c.addEventListener("mousemove",e=>showTip(e,
+      `<b>${p.name}</b><br>${int(p.rating_count)} ratings · ${fmt(p.rating)}★<br>`+
+      `${int(p.staleness_days)} days stale`));
+    c.addEventListener("mouseleave",hideTip);
+    c.addEventListener("click",()=>openDrawer(p.track_id));
+    svg.appendChild(c);
+  };
+  out.forEach(p=>plot(p,"var(--recessive)"));
+  inZone.forEach(p=>plot(p,"var(--series-1)"));
+}
+
+/* ---------------- histogram ---------------- */
+function drawHist(){
+  const svg=$("#hist"); clear(svg);
+  const W=svg.clientWidth||420,H=190,M={t:8,r:10,b:30,l:32};
+  const iw=W-M.l-M.r,ih=H-M.t-M.b;
+  const vals=ROWS.map(r=>r.staleness_days).filter(v=>v!==null);
+  if(!vals.length) return;
+  const max=Math.max(...vals),nb=14,bw=max/nb;
+  const bins=Array.from({length:nb},()=>0);
+  vals.forEach(v=>bins[Math.min(nb-1,Math.floor(v/bw))]++);
+  const bmax=Math.max(...bins);
+  const t=liveThresholds();
+  bins.forEach((n,i)=>{
+    const h=(n/bmax)*ih, x=M.l+(i/nb)*iw, w=iw/nb-2;
+    const past=(i*bw)>=t.stale;
+    const rect=el("rect",{x:x,y:M.t+ih-h,width:w,height:h,rx:2,
+      fill:past?"var(--seq-450)":"var(--recessive)"});
+    rect.addEventListener("mousemove",e=>showTip(e,
+      `<b>${int(n)}</b> apps<br>${int(Math.round(i*bw))}–${int(Math.round((i+1)*bw))} days`));
+    rect.addEventListener("mouseleave",hideTip);
+    svg.appendChild(rect);
+  });
+  const zx=M.l+Math.min(1,t.stale/max)*iw;
+  svg.appendChild(el("line",{x1:zx,x2:zx,y1:M.t,y2:M.t+ih,stroke:"var(--series-2)",
+    "stroke-width":2,"stroke-dasharray":"4 3"}));
+  const lb=el("text",{x:Math.min(zx+5,W-60),y:M.t+11,class:"tick",fill:"var(--series-2)"});
+  lb.textContent="cutoff"; svg.appendChild(lb);
+  svg.appendChild(el("line",{x1:M.l,x2:M.l+iw,y1:M.t+ih,y2:M.t+ih,stroke:"var(--axis)"}));
+  [0,max/2,max].forEach(v=>{
+    const tx=el("text",{x:M.l+(v/max)*iw,y:M.t+ih+15,"text-anchor":"middle",class:"tick"});
+    tx.textContent=Math.round(v/1000*10)/10+"k"; svg.appendChild(tx);
+  });
+  const xl=el("text",{x:M.l+iw/2,y:H-2,"text-anchor":"middle",class:"axlabel"});
+  xl.textContent="days since last update"; svg.appendChild(xl);
+}
+
+/* ---------------- rejection reasons ---------------- */
+function drawReasons(){
+  const svg=$("#reasons"); clear(svg);
+  const data=(STATS?.rejection_reasons||[]).slice(0,6);
+  const W=svg.clientWidth||420,H=190,M={t:6,r:44,b:10,l:118};
+  const iw=W-M.l-M.r;
+  if(!data.length){const t=el("text",{x:W/2,y:H/2,"text-anchor":"middle",class:"tick"});
+    t.textContent="Nothing rejected yet."; svg.appendChild(t); return;}
+  const max=Math.max(...data.map(d=>d[1]));
+  const bh=Math.min(22,(H-M.t)/data.length-6);
+  data.forEach(([label,n],i)=>{
+    const y=M.t+i*((H-M.t)/data.length);
+    const w=(n/max)*iw;
+    svg.appendChild(el("rect",{x:M.l,y:y,width:w,height:bh,rx:2,fill:"var(--seq-450)"}));
+    const lb=el("text",{x:M.l-8,y:y+bh/2+3.5,"text-anchor":"end",class:"tick"});
+    lb.textContent=label; svg.appendChild(lb);
+    const vl=el("text",{x:M.l+w+7,y:y+bh/2+3.5,class:"tick",fill:"var(--text-secondary)"});
+    vl.textContent=int(n); svg.appendChild(vl);
+  });
+}
+
+/* ---------------- tiles ---------------- */
+const COLS=[
+  ["name","App",r=>`<span class="dot" style="background:${r.passed?"var(--good)":"var(--recessive)"}"></span>${escapeHtml(r.name||"")}`,false],
+  ["seller","Seller",r=>escapeHtml(r.seller||"—"),false],
+  ["genre","Genre",r=>escapeHtml(r.genre||"—"),false],
+  ["staleness_days","Stale",r=>int(r.staleness_days),true],
+  ["rating","Rating",r=>fmt(r.rating),true],
+  ["review_decay","Decay★",r=>fmt(r.review_decay),true],
+  ["rating_count","Ratings",r=>int(r.rating_count),true],
+  ["velocity","Rev/day",r=>r.velocity===null?"—":fmt(r.velocity)+(r.velocity_saturated?"+":""),true],
+  ["demand_persistence","Demand",r=>fmt(r.demand_persistence,1),true],
+  ["incumbent_weakness","Weak",r=>fmt(r.incumbent_weakness,1),true],
+  ["composite","Composite",r=>fmt(r.composite),true],
+  ["passed","Status",r=>r.passed
+    ? `<span class="pill pass">pass${r.scored_manually?"":" · needs scoring"}</span>`
+    : `<span class="pill rej" title="${escapeHtml(r.kill_reason||"")}">rejected</span>`,false],
+];
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+function drawTiles(){
+  const s=STATS; if(!s) return;
+  const days=s.snapshot_days||0;
+  const tiles=[
+    ["Apps tracked",int(s.counts.apps),`${int(s.counts.discovery_hits)} keyword hits`],
+    ["Passed filters",int(s.passed),`of ${int(s.scored)} scored`],
+    ["Reviews",int(s.counts.reviews),`${int(s.counts.complaint_clusters)} clusters`],
+    ["Snapshot days",int(days),days<180?`trend needs ~180`:"trend computable"],
+  ];
+  $("#tiles").innerHTML=tiles.map(([k,v,n])=>
+    `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div>
+     <div class="n">${n}</div></div>`).join("");
+  $("#hdrsub").textContent=`rubric ${s.rubric_version} · ${int(s.counts.apps)} apps · `+
+    (s.last_snapshot?`last snapshot ${s.last_snapshot}`:"no snapshots yet");
+}
+
+/* ---------------- table ---------------- */
+function drawTable(){
+  const t=liveThresholds();
+  let rows=ROWS.slice();
+  const q=$("#q").value.trim().toLowerCase();
+  if(q) rows=rows.filter(r=>(r.name||"").toLowerCase().includes(q)
+      ||(r.seller||"").toLowerCase().includes(q));
+  const g=$("#genrefilter").value;
+  if(g) rows=rows.filter(r=>r.genre===g);
+  const p=$("#passfilter").value;
+  if(p==="passed") rows=rows.filter(r=>r.passed);
+  else if(p==="rejected") rows=rows.filter(r=>!r.passed);
+
+  rows.sort((a,b)=>{
+    let x=a[sortKey],y=b[sortKey];
+    if(typeof x==="boolean"){x=x?1:0;y=y?1:0;}
+    if(x===null||x===undefined) return 1;
+    if(y===null||y===undefined) return -1;
+    if(typeof x==="string") return sortDir*x.localeCompare(y);
+    return sortDir*(x-y);
+  });
+
+  $("#thead").innerHTML=COLS.map(([k,label,,num])=>
+    `<th data-k="${k}" ${num?'style="text-align:right"':""}>${label}`+
+    (sortKey===k?` <span class="arrow">${sortDir<0?"▼":"▲"}</span>`:"")+"</th>").join("");
+  $("#thead").querySelectorAll("th").forEach(th=>th.onclick=()=>{
+    const k=th.dataset.k;
+    if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=-1;}
+    drawTable();
+  });
+  $("#tbody").innerHTML=rows.slice(0,600).map(r=>
+    `<tr data-id="${r.track_id}">`+COLS.map(([k,,render,num])=>
+      `<td class="${num?"num":""}">${render(r)}</td>`).join("")+"</tr>").join("");
+  $("#tbody").querySelectorAll("tr").forEach(tr=>tr.onclick=()=>openDrawer(+tr.dataset.id));
+  $("#tablecount").textContent=`${rows.length} shown`+(rows.length>600?" (first 600)":"");
+}
+
+function drawPreview(){
+  const t=liveThresholds();
+  const leg=$("#leg1");
+  if(leg) leg.textContent=dirty()?"would pass (preview)":"passed filters";
+  const n=ROWS.filter(r=>wouldPass(r,t)).length;
+  const box=$("#preview");
+  if(!dirty()){
+    box.className="preview clean";
+    box.innerHTML=`<b>${int(STATS?.passed??0)}</b> of <b>${int(STATS?.scored??0)}</b> apps pass the saved filters.`;
+  }else{
+    box.className="preview";
+    box.innerHTML=`Preview: <b>${int(n)}</b> apps would enter the target zone `+
+      `(saved: <b>${int(STATS?.passed??0)}</b>). The competitor rule can only be " +
+      "evaluated server-side, so the real count may be lower.`;
+  }
+}
+function draw(){drawTiles();drawScatter();drawHist();drawReasons();drawTable();drawPreview();}
+
+/* ---------------- drawer ---------------- */
+async function openDrawer(id){
+  const d=$("#drawer"),b=$("#drawerbody");
+  b.innerHTML='<p class="muted">Loading…</p>'; d.classList.add("open");
+  const r=await fetch(`/api/app/${id}`).then(r=>r.json());
+  const m=r.metrics||{};
+  const dims=Object.entries(r.dimensions||{}).map(([k,v])=>
+    `<dt>${k.replace(/_/g," ")}</dt><dd>${fmt(v,1)}${r.manual_missing.includes(k)?' <span class="muted">manual</span>':""}</dd>`).join("");
+  b.innerHTML=`
+    <h2>${escapeHtml(r.name)}</h2>
+    <p class="muted" style="margin:3px 0 8px">${escapeHtml(r.seller||"")} · ${escapeHtml(r.genre||"")}
+      · <a href="${r.store_url}" target="_blank" rel="noopener">App Store ↗</a></p>
+    ${r.passed?'<span class="pill pass">passed filters</span>'
+      :`<span class="pill rej">rejected</span>`}
+    ${r.filter_reasons.length?`<ul class="muted" style="font-size:12px;margin:8px 0 0;padding-left:18px">
+      ${r.filter_reasons.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`:""}
+    ${r.filter_skipped.length?`<p class="muted" style="font-size:11.5px;margin:6px 0 0">
+      skipped (no data): ${r.filter_skipped.join(", ")}</p>`:""}
+    <dl class="kv">
+      <dt>staleness</dt><dd>${int(m.staleness_days)} d</dd>
+      <dt>rating</dt><dd>${fmt(m.average_user_rating)} (${int(m.user_rating_count)})</dd>
+      <dt>decay (API)</dt><dd>${m.rating_decay===null?'<span class="muted">unavailable</span>':fmt(m.rating_decay)}</dd>
+      <dt>decay (reviews)</dt><dd>${fmt(m.review_rating_decay)}</dd>
+      <dt>velocity</dt><dd>${fmt(m.velocity)}/day ${m.velocity_saturated?'<span class="warn">saturated</span>':""}</dd>
+      <dt>trend</dt><dd>${fmt(m.velocity_trend)}</dd>
+      <dt>1–2★ density</dt><dd>${m.complaint_density===null?"—":Math.round(m.complaint_density*100)+"%"}</dd>
+      <dt>installs</dt><dd>${m.installs_bucket||"—"} <span class="muted">est.</span></dd>
+      <dt>monetization</dt><dd>${m.revenue_model||"—"}</dd>
+      ${dims}
+      <dt>composite</dt><dd><b>${fmt(r.composite)}</b></dd>
+    </dl>
+    ${r.notes?.length?`<p class="muted" style="font-size:11.5px">${r.notes.map(escapeHtml).join("<br>")}</p>`:""}
+    <h3 style="font-size:12px;margin:14px 0 7px">Manual scores</h3>
+    <div id="manual"></div>
+    <h3 style="font-size:12px;margin:16px 0 7px">Complaint clusters</h3>
+    ${r.clusters.length?r.clusters.map(c=>`
+      <div class="cluster"><div class="t">${escapeHtml(c.theme)}
+        <span class="muted">· ${c.kind==="broken"?"broken":"missing feature"} ·
+        ${c.frequency} reviews</span></div>
+        <div class="muted" style="font-size:11.5px;margin-top:3px">${escapeHtml(c.summary||"")}</div>
+      </div>`).join("")
+      :'<p class="muted" style="font-size:12px">Not clustered yet — run <code>screener cluster '+r.track_id+'</code>.</p>'}
+    <h3 style="font-size:12px;margin:16px 0 7px">Recent reviews</h3>
+    ${r.reviews.slice(0,6).map(v=>`<div class="quote"><b>${"★".repeat(v.rating)}</b>
+      ${escapeHtml(v.title||"")}<br>${escapeHtml((v.body||"").slice(0,220))}</div>`).join("")
+      ||'<p class="muted" style="font-size:12px">No reviews fetched.</p>'}`;
+
+  const dimsManual=["monetization_ceiling","capability_delta","build_cost","distribution_wedge"];
+  $("#manual").innerHTML=dimsManual.map(k=>
+    `<div class="field"><label>${k.replace(/_/g," ")}
+      <b id="mv_${k}">${r.dimensions[k]??"—"}</b></label>
+     <input type="range" min="0" max="5" step="0.5" id="ms_${k}"
+       value="${r.dimensions[k]??0}"></div>`).join("")
+    +`<div class="row"><button class="btn primary sm" id="savemanual">Save scores</button></div>`;
+  dimsManual.forEach(k=>$("#ms_"+k).oninput=e=>$("#mv_"+k).textContent=e.target.value);
+  $("#savemanual").onclick=async()=>{
+    const scores={}; dimsManual.forEach(k=>scores[k]=$("#ms_"+k).value);
+    await fetch(`/api/manual/${id}`,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({scores})});
+    await refresh(); openDrawer(id);
+  };
+}
+$("#drawerclose").onclick=()=>$("#drawer").classList.remove("open");
+addEventListener("keydown",e=>{if(e.key==="Escape")$("#drawer").classList.remove("open");});
+
+/* ---------------- settings ---------------- */
+function fillSettings(s){
+  const f=s.settings.filters;
+  $("#f_stale").value=f.min_staleness_days; $("#f_rmin").value=f.min_average_user_rating;
+  $("#f_rmax").value=f.max_average_user_rating; $("#f_count").value=f.min_user_rating_count;
+  $("#f_trend").value=f.min_velocity_trend; $("#f_rank").value=f.competitor_cohort_top_rank;
+  $("#f_genre").checked=!!f.competitor_require_same_genre;
+  $("#seeds").value=s.seeds;
+  BASE=liveThresholds();
+  $("#weights").innerHTML=Object.entries(s.settings.weights).map(([k,v])=>
+    `<div class="field"><label>${k.replace(/_/g," ")} <b id="wv_${k}">${Math.round(v*100)}%</b></label>
+     <input type="range" min="0" max="60" step="5" id="w_${k}" value="${Math.round(v*100)}"></div>`).join("");
+  Object.keys(s.settings.weights).forEach(k=>$("#w_"+k).oninput=()=>{
+    $("#wv_"+k).textContent=$("#w_"+k).value+"%"; weightSum();});
+  weightSum(); syncLabels();
+}
+function weightSum(){
+  const ks=Object.keys(SETTINGS.settings.weights);
+  const sum=ks.reduce((a,k)=>a+ +$("#w_"+k).value,0);
+  const box=$("#wsum");
+  box.textContent=`total ${sum}%`+(sum===100?"":" — must be 100% to apply");
+  box.className="jobline"+(sum===100?"":" warn");
+  return sum;
+}
+function syncLabels(){
+  $("#v_stale").textContent=$("#f_stale").value;
+  $("#v_rmin").textContent=(+$("#f_rmin").value).toFixed(1);
+  $("#v_rmax").textContent=(+$("#f_rmax").value).toFixed(1);
+  $("#v_count").textContent=(+$("#f_count").value).toLocaleString();
+  $("#v_trend").textContent=(+$("#f_trend").value).toFixed(2);
+  $("#v_rank").textContent=$("#f_rank").value;
+}
+["f_stale","f_rmin","f_rmax","f_count","f_trend","f_rank"].forEach(id=>
+  $("#"+id).addEventListener("input",()=>{syncLabels();drawScatter();drawHist();drawPreview();}));
+$("#f_genre").addEventListener("change",drawPreview);
+["q","genrefilter","passfilter"].forEach(id=>$("#"+id).addEventListener("input",drawTable));
+
+$("#revert").onclick=()=>{fillSettings(SETTINGS);draw();};
+$("#apply").onclick=async()=>{
+  if(weightSum()!==100){alert("Rubric weights must total 100%.");return;}
+  const t=liveThresholds();
+  const weights={};
+  Object.keys(SETTINGS.settings.weights).forEach(k=>weights[k]=+$("#w_"+k).value/100);
+  $("#apply").disabled=true; $("#apply").textContent="Applying…";
+  const res=await fetch("/api/settings",{method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      filters:{min_staleness_days:t.stale,min_average_user_rating:t.rmin,
+        max_average_user_rating:t.rmax,min_user_rating_count:t.count,
+        min_velocity_trend:t.trend,competitor_cohort_top_rank:t.rank,
+        competitor_require_same_genre:t.genre},
+      weights, seeds:$("#seeds").value})});
+  if(!res.ok){alert((await res.json()).detail||"Could not save settings.");}
+  else await fetch("/api/score",{method:"POST"});
+  $("#apply").disabled=false; $("#apply").textContent="Apply & rescore";
+  await refresh();
+};
+
+/* ---------------- jobs ---------------- */
+async function runStage(stage){
+  const res=await fetch(`/api/run/${stage}`,{method:"POST",
+    headers:{"Content-Type":"application/json"},body:JSON.stringify({})});
+  if(res.status===409){$("#jobline").textContent="a run is already in progress";return;}
+  pollJob();
+}
+$("#runsearch").onclick=()=>runStage("discover");
+$("#runsnap").onclick=()=>runStage("snapshot");
+$("#runrev").onclick=()=>runStage("reviews");
+let polling=null;
+function pollJob(){
+  clearInterval(polling);
+  polling=setInterval(async()=>{
+    const j=await fetch("/api/job").then(r=>r.json());
+    const busy=j.running;
+    ["runsearch","runsnap","runrev"].forEach(id=>$("#"+id).disabled=busy);
+    if(j.error){$("#jobline").innerHTML=`<span class="warn">${escapeHtml(j.error)}</span>`;
+      clearInterval(polling);}
+    else if(busy) $("#jobline").textContent=`${j.stage} running… (rate-limited, be patient)`;
+    else if(j.finished){$("#jobline").textContent=j.finished;clearInterval(polling);refresh();}
+    else clearInterval(polling);
+  },1500);
+}
+
+/* ---------------- boot ---------------- */
+async function refresh(){
+  const [apps,stats]=await Promise.all([
+    fetch("/api/apps").then(r=>r.json()),
+    fetch("/api/stats").then(r=>r.json())]);
+  ROWS=apps.rows; STATS=stats;
+  const sel=$("#genrefilter"),cur=sel.value;
+  sel.innerHTML='<option value="">All genres</option>'+
+    apps.genres.map(g=>`<option${g===cur?" selected":""}>${escapeHtml(g)}</option>`).join("");
+  draw();
+}
+(async()=>{
+  SETTINGS=await fetch("/api/settings").then(r=>r.json());
+  fillSettings(SETTINGS);
+  await refresh();
+  addEventListener("resize",()=>{drawScatter();drawHist();drawReasons();});
+})();
+</script>
+</body>
+</html>

@@ -504,6 +504,36 @@ def status(config: ConfigOpt = Path("config.toml")) -> None:
         console.print("\n  [yellow]No snapshots yet. Run `screener snapshot`.[/yellow]")
 
 
+@app.command()
+def serve(
+    config: ConfigOpt = Path("config.toml"),
+    host: Annotated[str, typer.Option(help="Bind address. Localhost by default.")] = "127.0.0.1",
+    port: Annotated[int, typer.Option()] = 8765,
+    log_level: LogLevelOpt = "WARNING",
+) -> None:
+    """Open the local web UI — tune filters, sort/filter apps, view dossiers.
+
+    Reads and writes the real config.toml and the real database, so it binds to
+    localhost only. Don't put it on a network.
+    """
+    cfg = _load(config, log_level)
+    try:
+        import uvicorn
+
+        from screener.web import create_app
+    except ImportError as exc:
+        console.print(
+            "[red]UI dependencies missing.[/red] Install with: "
+            "[cyan]pip install -e '.[ui]'[/cyan]"
+        )
+        raise typer.Exit(1) from exc
+
+    with Database(cfg.db_path) as db:
+        db.migrate()
+    console.print(f"[green]Screener UI[/green] → http://{host}:{port}")
+    uvicorn.run(create_app(config.resolve()), host=host, port=port, log_level="warning")
+
+
 @app.command("run-daily")
 def run_daily(
     config: ConfigOpt = Path("config.toml"),

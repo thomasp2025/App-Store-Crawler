@@ -24,6 +24,13 @@ dev = [
     "respx>=0.21",
 ]
 play = ["google-play-scraper>=1.2"]
+ui = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    # tomlkit, not tomllib: writing settings back must preserve the comments in
+    # config.toml, which explain every threshold.
+    "tomlkit>=0.12",
+]
 
 [project.scripts]
 screener = "screener.cli:app"

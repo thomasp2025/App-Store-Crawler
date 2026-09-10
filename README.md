@@ -61,6 +61,42 @@ even against a small seed set — scoring can always be recomputed later.
 same day updates that day's rows rather than duplicating them, so a retry after a failure
 is always safe.
 
+## The UI
+
+```bash
+pip install -e ".[ui]"
+screener serve            # → http://127.0.0.1:8765
+```
+
+Localhost only, by design — it reads and writes the real `config.toml` and the real
+database, so it is not something to put on a network.
+
+- **Opportunity map** — staleness × rating, dot size = rating volume. The shaded box is
+  the live filter. Drag any threshold and the box moves, the scatter repaints and a
+  banner tells you how many apps the new setting would admit *before* you commit it.
+  Click any dot for the full dossier.
+- **Sort & filter** — every column sorts; free-text search across name and seller, plus
+  genre and pass/reject filters.
+- **Settings** — thresholds, rubric weights and the seed keyword list, written back to
+  `config.toml` through `tomlkit` so the comments explaining each threshold survive.
+  An edit that would produce an invalid config (weights not summing to 1.0) is rejected
+  and rolled back rather than leaving the crawler unable to start.
+- **Run stages** — search, snapshot and review ingestion can be kicked off from the
+  sidebar. One at a time: the crawler is globally rate-limited and SQLite is a single
+  writer, so concurrent runs would fight over both.
+- **Manual scoring** — score the four human dimensions with sliders in the detail drawer,
+  as an alternative to the CSV round-trip.
+
+Two honesty details worth knowing. The scatter colours by the **server's** verdict until
+you actually move a slider — the browser can't evaluate the competitor rule, so showing
+a preview as fact would overstate the funnel. Only while dragging does it switch to the
+client-side approximation, and the legend changes to say so. Chart colours are checked
+with the palette validator rather than by eye: the blue/gray pair clears CVD separation,
+normal-vision separation and 3:1 surface contrast in both light and dark.
+
+The UI is a deliberate departure from the brief's "no web UI initially" — added on
+request after the CLI was complete.
+
 ## Commands
 
 | Command | Does |
@@ -80,6 +116,7 @@ is always safe.
 | `screener report keywords` | Yield per seed, so dead terms get pruned. |
 | `screener status` | Row counts and collection coverage. |
 | `screener cache clear [--kind reviews]` | Wipe cached responses. |
+| `screener serve` | Local web UI for tuning filters and browsing results. |
 
 Every command takes `--config` and `--no-cache`.
 
@@ -151,7 +188,7 @@ data/seeds.txt      discovery seeds — narrow long-tail terms, not category nam
 ## Tests
 
 ```bash
-.venv/bin/pytest          # 130 tests, no network — all fixtures are recorded
+.venv/bin/pytest          # 142 tests, no network — all fixtures are recorded
 .venv/bin/ruff check src tests && .venv/bin/black --check src tests
 .venv/bin/mypy src        # strict
 ```
