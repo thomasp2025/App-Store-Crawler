@@ -1,0 +1,131 @@
+# App Store Opportunity Screener — all tunable thresholds, weights and constants.
+# Nothing in this file should be duplicated as a literal in Python source.
+
+[http]
+# Undocumented public endpoints. Community consensus is ~20 req/min before 403s.
+rate_limit_per_minute = 15
+max_concurrency = 2
+timeout_seconds = 30.0
+user_agent = "appstore-opportunity-screener/0.1 (personal research; contact: set OPERATOR_CONTACT in .env)"
+max_retries = 5
+backoff_base_seconds = 1.5
+backoff_max_seconds = 120.0
+backoff_jitter = 0.35
+# Consecutive 403s across the client before we treat the block as a hard stop
+# rather than retrying into a ban.
+hard_stop_after_consecutive_403 = 3
+
+[cache]
+dir = "data/cache"
+enabled = true
+# TTLs in hours, per logical response kind.
+ttl_hours_lookup = 24
+ttl_hours_reviews = 24
+ttl_hours_search = 168  # 7 days
+
+[db]
+path = "data/screener.db"
+
+[discovery]
+country = "us"
+search_limit = 200          # iTunes Search API hard cap
+lookup_batch_size = 100     # verified cap; see docs/endpoints.md
+# The top of search results is where funded incumbents live. Keep the tail.
+min_rank = 1
+max_rank = 250
+seeds_file = "data/seeds.txt"
+
+[reviews]
+country = "us"
+max_pages = 10              # feed serves ~50/page, ~500 most recent
+page_size_hint = 50
+
+[metrics]
+# reviews-per-rating conversion. Historically cited 1-3%; higher since in-app
+# prompts became standard. Order-of-magnitude only — never report as a number.
+rating_rate = 0.03
+velocity_window_days = 90
+# Below this many reviews we refuse to approximate velocity from the timestamp span.
+min_reviews_for_span_velocity = 20
+# If the most recent `max_pages` of reviews span fewer days than this, the feed is
+# saturated and velocity is a lower bound, not a measurement.
+saturation_span_days = 30
+
+[filters]
+# Stage 2 hard filters. Auto-reject. These WILL be tuned.
+min_staleness_days = 450
+min_velocity_trend = 0.8
+max_average_user_rating = 4.4
+min_average_user_rating = 2.8
+min_user_rating_count = 300
+# >= this many competitors in the same keyword cluster updated within
+# `competitor_fresh_days` -> reject, the market is being actively served.
+max_fresh_competitors = 2
+competitor_fresh_days = 90
+# What counts as a "competitor". Co-discovery by one keyword is far too loose on its
+# own: a search returns ~190 loosely-related apps, so every candidate would look
+# surrounded. A real competitor ranks high for a term the candidate also ranks for,
+# and sits in the same category.
+competitor_cohort_top_rank = 50
+competitor_require_same_genre = true
+
+[scoring]
+rubric_version = "v1"
+# Weights must sum to 1.0; validated at load.
+[scoring.weights]
+demand_persistence = 0.20
+incumbent_weakness = 0.15
+monetization_ceiling = 0.25
+capability_delta = 0.20
+build_cost = 0.10
+distribution_wedge = 0.10
+
+[scoring.demand_persistence]
+# reviews/day -> 0-5. Upper edge of each bucket.
+velocity_breakpoints = [0.1, 0.5, 2.0, 8.0, 25.0]
+# velocity_trend multiplier applied after the bucket lookup, clamped to 0-5.
+trend_bonus_at = 1.5
+trend_bonus = 1.0
+
+[scoring.incumbent_weakness]
+# rating_decay (lifetime - current version) -> 0-5.
+# NOTE: as of the 2026-09-10 probe Apple echoes the lifetime rating into the
+# current-version field for every app sampled, so this signal is almost always
+# unavailable. Kept because it is free and may come back. See docs/endpoints.md.
+decay_breakpoints = [0.0, 0.25, 0.5, 1.0, 1.5]
+# review_rating_decay (lifetime rating - mean of recent review ratings) -> 0-5.
+# The live substitute. Runs higher than the API field because review writers skew
+# polarised, so it gets its own, wider breakpoints.
+review_decay_breakpoints = [0.5, 1.0, 1.5, 2.0, 2.5]
+# staleness days -> 0-5.
+staleness_breakpoints = [450, 730, 1095, 1460, 1825]
+# share of 1-2* reviews in the trailing window -> 0-5.
+complaint_density_breakpoints = [0.15, 0.25, 0.40, 0.55, 0.70]
+# sub-weights within the incumbent_weakness dimension; must sum to 1.0
+decay_weight = 0.35
+review_decay_weight = 0.25
+staleness_weight = 0.20
+complaint_density_weight = 0.20
+
+[kill_criteria]
+# Stage 4. Any one true = auto-reject regardless of composite. Prompted manually.
+flags = [
+    "native_os_feature",
+    "requires_licensed_data",
+    "requires_network_effects",
+    "trade_dress_inseparable",
+    "pricing_model_mismatch",
+]
+
+[clustering]
+model = "claude-opus-5"
+max_reviews_per_batch = 120
+max_output_tokens = 8000
+lookback_days = 365
+max_star_rating = 2         # only 1-2* reviews feed clustering
+# NOTE: no temperature knob -- Claude Opus 5 rejects sampling params with a 400.
+max_examples_per_theme = 5
+
+[report]
+shortlist_limit = 50
+sparkline_buckets = 12

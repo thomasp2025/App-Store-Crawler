@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Secrets — never commit.
+.env
+
+# Local data: the database, the response cache, generated reports.
+data/cache/
+data/*.db
+data/*.db-wal
+data/*.db-shm
+reports/
+*.csv
+!tests/fixtures/*.csv
+logs/*
+!logs/.gitkeep

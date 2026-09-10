@@ -1,0 +1,668 @@
+{
+ "feed": {
+  "author": {
+   "name": {
+    "label": "iTunes Store"
+   },
+   "uri": {
+    "label": "http://www.apple.com/itunes/"
+   }
+  },
+  "entry": [
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id103010029"
+     },
+     "name": {
+      "label": "NeedMoSleep"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-09T00:24:02-07:00"
+    },
+    "im:rating": {
+     "label": "3"
+    },
+    "im:version": {
+     "label": "6.26.35"
+    },
+    "id": {
+     "label": "14528196076"
+    },
+    "title": {
+     "label": "Watch Ultra"
+    },
+    "content": {
+     "label": "Sometimes when I track with phone and watch, journal crashes and doesn\u2019t record night, I wish phone app automatically triggered iWatch to start and vice versa, having to start both makes them crash. \n\nI wish instead of the swipe up to stop recording that it was a press/hold, so many times I accidentally cancel when I swipe to go to another app l. \n\nAlso wish you could record naps or continue an interrupted night specially with a newborn/toddler or red eye, when nights are perfect allow us to track as such",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id33128255"
+     },
+     "name": {
+      "label": "RowdyRoddyZ-man"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-07T11:00:06-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.35"
+    },
+    "id": {
+     "label": "14522322374"
+    },
+    "title": {
+     "label": "Free Trial-Not, got charged"
+    },
+    "content": {
+     "label": "Downloaded the app, and was told it would send you an email after 5 days to warn you to discontinue the app before the end of the 7 day trial!  Never sent a warning email, then was charged $76.76.  Have written a number of times, but no one responds.  No Refund; and really frustrated!  Don\u2019t try it, don\u2019t purchase it!",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id38620340"
+     },
+     "name": {
+      "label": "Traveler999zz"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-07T10:10:28-07:00"
+    },
+    "im:rating": {
+     "label": "3"
+    },
+    "im:version": {
+     "label": "6.26.35"
+    },
+    "id": {
+     "label": "14522159739"
+    },
+    "title": {
+     "label": "1?3"
+    },
+    "content": {
+     "label": "3",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id36312230"
+     },
+     "name": {
+      "label": "MasonXxxo"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-07T07:27:36-07:00"
+    },
+    "im:rating": {
+     "label": "2"
+    },
+    "im:version": {
+     "label": "6.26.35"
+    },
+    "id": {
+     "label": "14521589183"
+    },
+    "title": {
+     "label": "Misleading Premium Features"
+    },
+    "content": {
+     "label": "I\u2019ve had this app since 2021. I was an \u201cearly adopter\u201d for the premium features. But certain features became inaccessible again behind a new Premium wall. While I was still able to use the app the same way, I decided to upgrade to the \u201cnew\u201d Premium. I am currently subscribed for $20/year, yet I get error messages stating my subscription is for another account with the same email address I\u2019m already logged in with. And I still don\u2019t have access to the new premium features even though I\u2019m being charged $20/year. I am sick of the constant error messages and the misleading & changing features for Premium users. Something about this app\u2019s business practice feels shady. I have cancelled and am looking for other sleep tracking apps.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id1116860068"
+     },
+     "name": {
+      "label": "Kykyguy07"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-07T06:50:17-07:00"
+    },
+    "im:rating": {
+     "label": "5"
+    },
+    "im:version": {
+     "label": "6.26.35"
+    },
+    "id": {
+     "label": "14521457882"
+    },
+    "title": {
+     "label": "Great Sleep"
+    },
+    "content": {
+     "label": "I fall asleep way quicker and getting up is so much easier.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id137770917"
+     },
+     "name": {
+      "label": "Babydolllimbs"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-06T09:06:40-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14518128012"
+    },
+    "title": {
+     "label": "Cannot cancel before trial ends"
+    },
+    "content": {
+     "label": "I have spent literal hours trying to find out how to cancel this trial. It does not show under subscriptions and doesn\u2019t recognize my email address when I try to cancel that way. The app was a curiosity for me and not very useful, now I seem to be stuck paying for it when the trial ends.\n\nEdit: I did not \u201cforget\u201d to cancel my trial. You people have made it impossible to cancel. I must somehow know an email that you have assigned to me through a website called \u201cpaddle\u201d and unsubscribe from there. This is unethical and amoral and you won\u2019t be getting any more of my money if I can help it.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id1883747125"
+     },
+     "name": {
+      "label": "anjabedro"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-06T03:40:06-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14517070875"
+    },
+    "title": {
+     "label": "Predatory cancellation plan"
+    },
+    "content": {
+     "label": "It\u2019s a great app that I use all the time, in fact I downloaded it years ago when the free plan was the default. However now that I download it again, I find that I need to subscribe to a yearly $57 subscription up front and go through layers and layers of hidden menus to get to the free plan again.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id108409209"
+     },
+     "name": {
+      "label": "123ncikname"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-04T14:28:56-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14511096967"
+    },
+    "title": {
+     "label": "Fraudulent"
+    },
+    "content": {
+     "label": "I signed up for free trial cancelled and was still charged The customer service bot is denying I was charged.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id964924566"
+     },
+     "name": {
+      "label": "\u6c34\u874b"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-04T07:55:21-07:00"
+    },
+    "im:rating": {
+     "label": "2"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14509894548"
+    },
+    "title": {
+     "label": "inaccurate tracker"
+    },
+    "content": {
+     "label": "i\u2019ve been using this app to improve my sleep habits, but the sleep tracker is not working accurately. even though i slept in at 2am, it said i slept in at 11 or smth. i don\u2019t think this app works accurately.",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id170238042"
+     },
+     "name": {
+      "label": "Una Estudiante de espa\u00f1ol"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-03T21:21:03-07:00"
+    },
+    "im:rating": {
+     "label": "5"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14508177256"
+    },
+    "title": {
+     "label": "Had this app for over 10 years- still love it!"
+    },
+    "content": {
+     "label": "I remember buying this app to help me get better sleep in college. Over 10 years later, and I still love it! It connects well to my Apple Watch for a quiet wake up. Now, it has so many features to help you fall asleep, and also analyze your sleep. It always goes off reliably, so I never doubt if I\u2019ll sleep through it. Everything I could want in a sleep analysis app!",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id38453719"
+     },
+     "name": {
+      "label": "verymadreefer"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-01T13:37:48-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14499231150"
+    },
+    "title": {
+     "label": "Impossible to cancel"
+    },
+    "content": {
+     "label": "If you sign up for the free trial anticipate paying for the full annual subscription.  They make it impossible to cancel",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   },
+   {
+    "author": {
+     "uri": {
+      "label": "https://itunes.apple.com/us/reviews/id982005267"
+     },
+     "name": {
+      "label": "Homelandsecurity"
+     },
+     "label": ""
+    },
+    "updated": {
+     "label": "2026-09-01T07:25:36-07:00"
+    },
+    "im:rating": {
+     "label": "1"
+    },
+    "im:version": {
+     "label": "6.26.34"
+    },
+    "id": {
+     "label": "14498032465"
+    },
+    "title": {
+     "label": "Trash"
+    },
+    "content": {
+     "label": "Don\u2019t use, didn\u2019t work unless you pay for it",
+     "attributes": {
+      "type": "text"
+     }
+    },
+    "link": {
+     "attributes": {
+      "rel": "related",
+      "href": "https://itunes.apple.com/us/review?id=320606217&type=Purple%20Software"
+     }
+    },
+    "im:voteSum": {
+     "label": "0"
+    },
+    "im:contentType": {
+     "attributes": {
+      "term": "Application",
+      "label": "Application"
+     }
+    },
+    "im:voteCount": {
+     "label": "0"
+    }
+   }
+  ],
+  "updated": {
+   "label": "2026-09-10T09:07:59-07:00"
+  },
+  "rights": {
+   "label": "Copyright 2008 Apple Inc."
+  },
+  "title": {
+   "label": "iTunes Store: Customer Reviews"
+  },
+  "icon": {
+   "label": "http://itunes.apple.com/favicon.ico"
+  },
+  "link": [
+   {
+    "attributes": {
+     "rel": "alternate",
+     "type": "text/html",
+     "href": "https://music.apple.com/WebObjects/MZStore.woa/wa/viewGrouping?cc=us&id=1"
+    }
+   },
+   {
+    "attributes": {
+     "rel": "self",
+     "href": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+    }
+   },
+   {
+    "attributes": {
+     "rel": "first",
+     "href": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=320606217/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+    }
+   },
+   {
+    "attributes": {
+     "rel": "last",
+     "href": "https://itunes.apple.com/us/rss/customerreviews/page=10/id=320606217/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+    }
+   },
+   {
+    "attributes": {
+     "rel": "previous",
+     "href": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=320606217/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+    }
+   },
+   {
+    "attributes": {
+     "rel": "next",
+     "href": "https://itunes.apple.com/us/rss/customerreviews/page=2/id=320606217/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+    }
+   }
+  ],
+  "id": {
+   "label": "https://itunes.apple.com/us/rss/customerreviews/page=1/id=320606217/sortby=mostrecent/json"
+  }
+ }
+}

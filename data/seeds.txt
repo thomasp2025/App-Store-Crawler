@@ -1,0 +1,50 @@
+# Discovery seeds — one search term per line. `#` comments ignored.
+#
+# Deliberately NARROW long-tail phrasing, not category names. "productivity" or
+# "fitness" return the funded incumbents; "shift work sleep schedule" returns the
+# five-year-abandoned app with 12,000 ratings that is the whole point of this tool.
+#
+# Log yield with `screener report keywords` and prune what doesn't produce.
+
+# --- utilities with sticky, unglamorous demand ---
+shift work sleep schedule
+tide chart offline
+septic tank maintenance log
+darkroom developing timer
+knitting row counter
+firewood moisture calculator
+cattle gestation calculator
+beekeeping hive inspection log
+rain gauge tracker
+well water testing log
+
+# --- niche professional tools ---
+hvac refrigerant charge calculator
+electrical conduit bend calculator
+concrete slab estimator
+livestock feed ration calculator
+pipe fitting takeoff
+marine engine hour log
+crane load chart
+scaffold inspection checklist
+
+# --- hobby / collection trackers ---
+vinyl record collection catalog
+board game score keeper
+fountain pen ink inventory
+model railroad inventory
+coin collection tracker
+sewing pattern organizer
+
+# --- health / personal logs with regulatory drag ---
+peak flow meter log
+seizure diary tracker
+warfarin inr log
+infant feeding log twins
+kidney stone water intake
+
+# --- travel / outdoors ---
+trail junction offline map
+sailing knot reference
+metal detecting finds log
+tide fishing solunar
